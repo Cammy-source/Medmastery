@@ -170,17 +170,39 @@ questions.length+
 }
 }
 
-function showNotes(){
-document.getElementById("notesBox").style.display="block";
+function verify(){
+  let code=document.getElementById("code").value;
 
-document.getElementById("notesBox").innerHTML=
-"<h3>Revision Notes</h3>"+
-"<p>• Cell is the basic unit of life.</p>"+
-"<p>• Heart pumps blood around the body.</p>";
+  if(!code){
+    alert("Enter transaction code");
+    return;
+  }
+
+  localStorage.setItem("premium","true");
+
+  alert("Premium unlocked 🎉");
+
+  unlockContent();
 }
 
-function verify(){
-let code=document.getElementById("code").value;
+function unlockContent(){
+  document.getElementById("notesBox").style.display="block";
+}
+
+function showNotes(){
+
+  if(localStorage.getItem("premium")!=="true"){
+    alert("Please upgrade to access notes");
+    return;
+  }
+
+  document.getElementById("notesBox").style.display="block";
+
+  document.getElementById("notesBox").innerHTML=
+  "<h3>Revision Notes</h3>"+
+  "<p>• Cell is the basic unit of life.</p>"+
+  "<p>• Heart pumps blood around the body.</p>";
+                  }
 
 if(!code){
 alert("Enter transaction code");
