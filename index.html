@@ -1,89 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MedMastery</title>
+</head>
+
+<body>
+
+<h1>MedMastery</h1>
+
+<button onclick="startQuiz()">Start Quiz</button>
+<button onclick="showNotes()">Notes</button>
+
+<br><br>
+
+<div id="quizBox"></div>
+<div id="notesBox" style="display:none;"></div>
+
+<br>
+
+<input type="text" id="code" placeholder="Enter transaction code">
+<button onclick="verify()">Unlock Premium</button>
+
+<script>
+
 let q=0;
 let score=0;
 
 let questions=[
-{
-q:"Basic unit of life?",
-options:["Cell","Organ","Bone"],
-answer:"Cell"
-},
-{
-q:"Heart pumps?",
-options:["Blood","Water","Air"],
-answer:"Blood"
-}
+  {
+    q:"Basic unit of life?",
+    options:["Cell","Organ","Bone"],
+    answer:"Cell"
+  },
+  {
+    q:"Heart pumps?",
+    options:["Blood","Water","Air"],
+    answer:"Blood"
+  }
 ];
 
 function startQuiz(){
-q=0;
-score=0;
-document.getElementById("quizBox").style.display="block";
-showQuestion();
+  q=0;
+  score=0;
+  document.getElementById("quizBox").style.display="block";
+  showQuestion();
 }
 
 function showQuestion(){
+  let current=questions[q];
+  let html="<h3>"+current.q+"</h3>";
 
-let current=questions[q];
+  current.options.forEach(function(opt){
+    html += "<button onclick=\"answer('"+opt+"')\">"+opt+"</button><br>";
+  });
 
-let html="<h3>"+current.q+"</h3>";
-
-current.options.forEach(function(opt){
-html+=
-"<button onclick=\"answer('"+opt+"')\">"+
-opt+
-"</button>";
-});
-
-document.getElementById("quizBox").innerHTML=html;
+  document.getElementById("quizBox").innerHTML = html;
 }
 
 function answer(choice){
+  if(choice===questions[q].answer){
+    score++;
+  }
 
-if(choice===questions[q].answer){
-score++;
-}
+  q++;
 
-q++;
-
-if(q<questions.length){
-showQuestion();
-}
-else{
-document.getElementById("quizBox").innerHTML=
-"<h3>Your Score: "+
-score+
-"/"+
-questions.length+
-"</h3>";
-}
+  if(q<questions.length){
+    showQuestion();
+  }else{
+    document.getElementById("quizBox").innerHTML =
+    "<h3>Your Score: "+score+"/"+questions.length+"</h3>";
+  }
 }
 
 function showNotes(){
+  if(localStorage.getItem("premium")!=="true"){
+    alert("Please upgrade to access notes");
+    return;
+  }
 
-if(localStorage.getItem("premium")!=="true"){
-alert("Please upgrade to access notes");
-return;
-}
+  document.getElementById("notesBox").style.display="block";
 
-document.getElementById("notesBox").style.display="block";
-
-document.getElementById("notesBox").innerHTML=
-"<h3>Revision Notes</h3>"+
-"<p>• Cell is the basic unit of life.</p>"+
-"<p>• Heart pumps blood around the body.</p>";
+  document.getElementById("notesBox").innerHTML =
+  "<h3>Revision Notes</h3>"+
+  "<p>Cell is the basic unit of life.</p>"+
+  "<p>Heart pumps blood around the body.</p>";
 }
 
 function verify(){
-let code=document.getElementById("code").value;
+  let code=document.getElementById("code").value;
 
-if(!code){
-alert("Enter transaction code");
-return;
-}
+  if(!code){
+    alert("Enter transaction code");
+    return;
+  }
 
-localStorage.setItem("premium","true");
-
-alert("Premium unlocked 🎉");
+  localStorage.setItem("premium","true");
+  alert("Premium unlocked 🎉");
 }
 
 </script>
